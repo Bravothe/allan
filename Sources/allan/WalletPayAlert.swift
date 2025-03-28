@@ -8,7 +8,7 @@ public struct WalletPayAlert: View {
     }
     
     public var body: some View {
-        EmptyView() // Placeholder view since alerts are the main UI
+        VStack {} // Use a minimal view instead of EmptyView
             .alert(isPresented: $walletPay.showPurchaseAlert) {
                 if let details = walletPay.purchaseDetails {
                     return Alert(
