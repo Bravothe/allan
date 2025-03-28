@@ -46,3 +46,4 @@ public struct WalletPayAlert: View {
         }
     }
 }
+

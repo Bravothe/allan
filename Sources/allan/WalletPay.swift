@@ -35,3 +35,4 @@ public class WalletPay: ObservableObject {
         showResultAlert = true
     }
 }
+
