@@ -14,14 +14,15 @@ public class WalletPay: ObservableObject {
 
     public init() {}
 
-    // Function to start the purchase process
+    // Public function to start the purchase process
     public func startPurchase(buyer: String, items: [String], amount: Double) {
         self.purchaseDetails = (buyer, items, amount)
         self.showPurchaseAlert = true
+        print("showPurchaseAlert set to true") // Debug
     }
     
-    // Function to process the payment
-    public func processTransaction() {
+    // Internal function to process the payment
+    func processTransaction() {
         guard let details = purchaseDetails else { return }
         
         if walletBalance >= details.amount {
@@ -35,4 +36,3 @@ public class WalletPay: ObservableObject {
         showResultAlert = true
     }
 }
-
