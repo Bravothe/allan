@@ -7,7 +7,7 @@ public class WalletPay: ObservableObject {
     @Published var showPurchaseAlert = false
     @Published var showTransactionAlert = false
     @Published var showResultAlert = false
-    @Published var showSignInAlert = false // New state for sign-in alert
+    @Published var showSignInAlert = false
     @Published var transactionMessage = ""
     @Published var purchaseDetails: (buyer: String, items: [String], amount: Double)? = nil
     @Published var enteredPasscode = ""
@@ -17,17 +17,19 @@ public class WalletPay: ObservableObject {
         print("WalletPay initialized") // Debug
     }
 
-    // Updated to include userId parameter
     public func startPurchase(userId: String, buyer: String, items: [String], amount: Double) {
         print("startPurchase called with userId: \(userId), buyer: \(buyer), items: \(items), amount: \(amount)") // Debug
         
-        if userId == self.userId { // Check if user IDs match
+        self.showPurchaseAlert = false // Reset states
+        self.showSignInAlert = false
+        
+        if userId == self.userId {
             self.purchaseDetails = (buyer, items, amount)
             self.showPurchaseAlert = true
-            print("User ID matches, showPurchaseAlert set to: \(showPurchaseAlert)") // Debug
+            print("User ID matches, showPurchaseAlert set to: \(showPurchaseAlert), showSignInAlert: \(showSignInAlert)") // Debug
         } else {
-            self.showSignInAlert = true // Trigger sign-in alert if IDs don’t match
-            print("User ID mismatch, showSignInAlert set to: \(showSignInAlert)") // Debug
+            self.showSignInAlert = true
+            print("User ID mismatch, showSignInAlert set to: \(showSignInAlert), showPurchaseAlert: \(showPurchaseAlert)") // Debug
         }
     }
     

@@ -10,16 +10,20 @@ public struct WalletPayAlert: View {
     
     public var body: some View {
         VStack {
-            Text("Debug: \(walletPay.showPurchaseAlert ? "Purchase Alert" : walletPay.showSignInAlert ? "Sign In Alert" : "No Alert")") // Debug
-        }
-        .alert(isPresented: $walletPay.showSignInAlert) { // New sign-in alert
-            Alert(
-                title: Text("Sign In Required"),
-                message: Text("Sign In to continue"),
-                dismissButton: .default(Text("OK")) {
-                    walletPay.showSignInAlert = false
+            Text("Debug: \(walletPay.showSignInAlert ? "Sign In" : walletPay.showPurchaseAlert ? "Purchase" : walletPay.showTransactionAlert ? "Transaction" : walletPay.showResultAlert ? "Result" : "No Alert")") // Debug
+            // Sign-in alert on a separate view
+            Color.clear
+                .frame(width: 0, height: 0)
+                .alert(isPresented: $walletPay.showSignInAlert) {
+                    print("Showing sign-in alert") // Debug
+                    return Alert(
+                        title: Text("Sign In Required"),
+                        message: Text("Sign In to continue"),
+                        dismissButton: .default(Text("OK")) {
+                            walletPay.showSignInAlert = false
+                        }
+                    )
                 }
-            )
         }
         .alert(isPresented: $walletPay.showPurchaseAlert) {
             if let details = walletPay.purchaseDetails {
@@ -42,7 +46,8 @@ public struct WalletPayAlert: View {
             }
         }
         .alert(isPresented: $walletPay.showTransactionAlert) {
-            Alert(
+            print("Showing transaction alert") // Debug
+            return Alert(
                 title: Text("Transaction Summary"),
                 message: Text("Enter your wallet passcode to complete the transaction."),
                 primaryButton: .default(Text("Continue")) {
@@ -52,7 +57,8 @@ public struct WalletPayAlert: View {
             )
         }
         .alert(isPresented: $walletPay.showResultAlert) {
-            Alert(
+            print("Showing result alert") // Debug
+            return Alert(
                 title: Text("Transaction Status"),
                 message: Text(walletPay.transactionResult),
                 dismissButton: .default(Text("OK"))
