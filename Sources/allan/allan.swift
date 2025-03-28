@@ -1,5 +1,5 @@
 import SwiftUI
-public struct WalletPayPopup: View {
+public struct WalletPayAlert: View {
     @ObservedObject var walletPay: WalletPay
 
     public init(walletPay: WalletPay) {
@@ -7,55 +7,42 @@ public struct WalletPayPopup: View {
     }
     
     public var body: some View {
-        VStack {
-            if walletPay.showPopup, let details = walletPay.purchaseDetails {
-                VStack {
-                    Text("Purchase Details")
-                        .font(.headline)
-                    Text("Buyer: \(details.buyer)")
-                    Text("Items: \(details.items.joined(separator: ", "))")
-                    Text("Total: $\(details.amount, specifier: "%.2f")")
-                    Button("Next") {
-                        walletPay.showPopup = false
-                        walletPay.showTransactionPopup = true
-                    }
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(radius: 5)
+        VStack {}
+        .alert(isPresented: $walletPay.showPurchaseAlert) {
+            if let details = walletPay.purchaseDetails {
+                return Alert(
+                    title: Text("Purchase Details"),
+                    message: Text("""
+                        Buyer: \(details.buyer)
+                        Items: \(details.items.joined(separator: ", "))
+                        Total: $\(details.amount, specifier: "%.2f")
+                    """),
+                    primaryButton: .default(Text("Next")) {
+                        walletPay.showPurchaseAlert = false
+                        walletPay.showTransactionAlert = true
+                    },
+                    secondaryButton: .cancel()
+                )
+            } else {
+                return Alert(title: Text("Error"), message: Text("Invalid purchase details"))
             }
-            
-            if walletPay.showTransactionPopup {
-                VStack {
-                    Text("Transaction Summary")
-                    Text("Enter your wallet passcode:")
-                    SecureField("Passcode", text: $walletPay.enteredPasscode)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-                    Button("Continue") {
-                        walletPay.processTransaction()
-                    }
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(radius: 5)
-            }
-            
-            if walletPay.showResultPopup {
-                VStack {
-                    Text(walletPay.transactionResult)
-                    Button("OK") {
-                        walletPay.showResultPopup = false
-                    }
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(10)
-                .shadow(radius: 5)
-            }
+        }
+        .alert(isPresented: $walletPay.showTransactionAlert) {
+            Alert(
+                title: Text("Transaction Summary"),
+                message: Text("Enter your wallet passcode to complete the transaction."),
+                primaryButton: .default(Text("Continue")) {
+                    walletPay.processTransaction()
+                },
+                secondaryButton: .cancel()
+            )
+        }
+        .alert(isPresented: $walletPay.showResultAlert) {
+            Alert(
+                title: Text("Transaction Status"),
+                message: Text(walletPay.transactionResult),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 }
-
