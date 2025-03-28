@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "allan",
+    platforms: [
+        .iOS(.v14),  // Set minimum iOS version to 14
+        .macOS(.v11) // Set minimum macOS version to 11 if you want to support macOS
+    ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
