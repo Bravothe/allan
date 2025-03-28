@@ -14,14 +14,12 @@ public class WalletPay: ObservableObject {
 
     public init() {}
 
-    // Public function to start the purchase process
     public func startPurchase(buyer: String, items: [String], amount: Double) {
         self.purchaseDetails = (buyer, items, amount)
         self.showPurchaseAlert = true
         print("showPurchaseAlert set to true") // Debug
     }
     
-    // Internal function to process the payment
     func processTransaction() {
         guard let details = purchaseDetails else { return }
         
